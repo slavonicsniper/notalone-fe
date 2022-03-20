@@ -1,0 +1,99 @@
+$main-color: #7268A6;
+$secondary-color: #86A3C3;
+$third-color: #86A3C3;
+$text-color: black;
+$text-color2: black;
+// #7268A6 #6B3074
+
+form {
+    width: 30vw;
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+.main-login {
+    animation: transitionIn 0.75s;
+    min-height: 50vh;
+    min-width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    background: linear-gradient(to right bottom, rgba($main-color, 0.9), rgba($secondary-color, 0.9));
+    .main-box {
+        text-align: center;
+        background: linear-gradient(to right bottom, rgba($secondary-color, 0.7), rgba($main-color, 0.4));
+        margin: 2rem auto;
+        box-shadow: 0.5rem 0.5rem 2rem -0.9rem black;
+        min-height: 50vh;
+        width: 40vw;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 0.8rem;
+        input {
+            display: block;
+            border: none;
+            height: 2rem;
+            width: 70%;
+            margin: auto;
+            margin-bottom: 0.6rem;
+            padding: 0.2rem 1rem;
+            font-size: small;
+            color: black;
+            transition: all 0.1s ease-in-out;
+            border-radius: 0.3rem;
+            &:focus {
+                outline: none;
+                border: none;
+            }
+            &:hover {
+                outline: 0.5px solid $main-color;
+                box-shadow: 4px 3px 9px -1px $main-color;
+            } 
+        }
+        label {
+            display: block;
+            text-align: left;
+            margin: auto;
+            width: 75%;
+            font-size: 0.9rem;
+            color: $text-color;
+            margin-bottom: 0.5rem;
+        }
+        .invalid-feedback {
+            color: #7a0000;
+            font-size: small;
+            margin-bottom: 0.4rem;
+        }
+        .submit-button {
+            width: 40%;
+            background: rgba($main-color, 0.9);
+            color: white;
+            border: 1px solid white;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: all 0.5 ease;
+            border-radius: 0.3rem;
+            margin-top: 0.3rem;
+            margin-bottom: 3rem;
+            font-size: 1.0rem;
+            &:hover {
+                box-shadow: 4px 3px 9px -1px $main-color;
+                transform: translateY(-2px);
+            } 
+        }
+    }
+}
+
+@keyframes transitionIn {
+    from {
+        opacity: 0;
+        transform: rotateX(-10deg);
+    }
+    to {
+        opacity: 1;
+        transform: rotateX(0);
+    }
+}

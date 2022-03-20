@@ -1,0 +1,64 @@
+$main-color: #7268A6;
+$secondary-color: #86A3C3;
+$text-color: #D8E0BB;
+
+nav {
+    background: linear-gradient(to right, rgba($main-color, 0.9), rgba($secondary-color, 0.9));
+    position: relative;
+    justify-content: space-between;
+    display: flex;
+    height: 3.8rem;
+    border-bottom: 2px solid black;
+    z-index: 99;
+    .left-side-navbar {
+        overflow: hidden;
+        margin-top: 0.5rem;
+        .logo-img-navbar{
+            float: left;
+            .logo-img {
+                width: 3rem;
+                height: 3rem;
+            }
+        }
+        .logo-img-text {
+            font-weight: 600;
+            font-size: 2.4rem;
+            color: $text-color;
+            overflow: hidden;
+            font {
+                color: white;
+            }
+        }
+    }
+    .right-side-navbar {
+        .menu-list {
+            list-style-type: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-right: 1rem; 
+            li a{
+                appearance: button;
+                -webkit-appearance: button;
+                -moz-appearance: button;
+                text-decoration: none;
+                background: rgba($main-color, 0.9);
+                color: white;
+                font-size: 1.2rem;
+                border: 1px solid white;
+                cursor: pointer;
+                padding: 0.5rem 1rem;
+                transition: all 0.5 ease;
+                border-radius: 0.5rem;
+                margin-bottom: 2rem;
+                &:hover {
+                    box-shadow: 4px 3px 9px -1px $main-color;
+                    transform: translateY(-2px);
+                } 
+                font-weight: 300;
+                padding: 5px;
+                margin-left: 0.7rem;
+            }
+        }
+    }
+}
