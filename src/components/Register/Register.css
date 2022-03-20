@@ -95,7 +95,7 @@ h3 {
   transition: all 0.5 ease;
   border-radius: 0.3rem;
   margin-top: 0.3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 0.5rem;
   font-size: 1.0rem;
 }
 
@@ -131,4 +131,16 @@ h3 {
             transform: rotateX(0);
   }
 }
-/*# sourceMappingURL=RegisterForm.css.map */
+
+.alert {
+  margin-bottom: 1rem;
+}
+
+.alert.red {
+  color: #7a0000;
+}
+
+.alert.green {
+  color: green;
+}
+/*# sourceMappingURL=Register.css.map */

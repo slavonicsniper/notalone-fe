@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Navbar from './components/Navbar/Navbar';
+import ForgotPassword from './components/ForgotPassword/ForgotPassword';
+import Confirmation from './components/Confirmation/Confirmation';
 import './App.css';
 
 function App() {
@@ -13,6 +15,8 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
+            <Route path="/forgotPassword" element={<ForgotPassword/>}/>
+            <Route path="/confirm/:confirmationCode" element={<Confirmation/>}/>
           </Routes>
         </Router>
       </header>

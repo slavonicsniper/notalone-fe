@@ -1,31 +1,64 @@
 import React, {useState} from 'react'
-import LoginForm from '../LoginForm/LoginForm';
+import AuthService from '../../services/AuthService';
+import './Login.css'
 
 function Login() {
 
-  const [user, setUser] = useState({name: '', email: ''});
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [color, setColor] = useState("");
+  const [details, setDetails] = useState({email: '', password: ''})
 
-  const Login = details => {
-    const requestOptions = {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        email: details.email,
-        password: details.password 
-      })
-  };
-  fetch('https://notalone-be.herokuapp.com/api/v1/users/login', requestOptions)
-      .then(response => response.json())
-      .then(data => console.log(data));
+  const submitHandler = (e) => {
+      e.preventDefault();
+
+      setMessage("");
+      setLoading(true);
+
+      AuthService.login(details).then((response) => {
+        if(response.hasOwnProperty('message')){
+          setMessage(response.message);
+          setColor('green');
+        } else {
+          setMessage(response.error);
+          setColor('red');
+        }
+      });
+      setLoading(false);
   }
 
   return (
-    <LoginForm Login={Login} error={error}/>
+    <div className='main-login'>
+      <div className='main-box'>
+        <form onSubmit={submitHandler}>
+          <h3>Login</h3>
+          <label htmlFor='email-one'>Email</label>
+          <input 
+              type='email' 
+              id='email-one'
+              onChange={e => setDetails({...details, email: e.target.value})}
+              value={details.email}
+          />
+          <label htmlFor='password-one'>Password</label>
+          <input 
+              type='password' 
+              id='password-one'
+              onChange={e => setDetails({...details, password: e.target.value})}
+              value={details.password}
+          />
+          <label htmlFor='forgot-password'>
+            <a href='/forgotPassword'>I forgot my password</a>
+          </label>
+          <button type='submit' className='submit-button'>Log in</button>
+          {message.length > 0 &&
+            <div className={'alert ' + color}>
+              {message}
+            </div>
+          }
+        </form>
+      </div>
+    </div>
   )
 }
 
 export default Login;
-
