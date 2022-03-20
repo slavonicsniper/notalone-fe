@@ -56,7 +56,13 @@ const verifyUser = async (code) => {
         },
     };
     let resData = await fetch(API_URL + '/users/confirm/' + code, requestOptions)
-        .then(response => response.json())
+        .then(response => {
+            if (response.status >= 200 && response.status <= 299) {
+                return response.json();
+            } else {
+                throw Error(response.statusText);
+            }
+        })
         .then(async (result) => {
                 return result;
             },
@@ -69,5 +75,6 @@ const verifyUser = async (code) => {
 
 export default {
   login,
-  register
+  register,
+  verifyUser
 }

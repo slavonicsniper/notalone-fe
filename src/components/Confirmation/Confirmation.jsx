@@ -1,26 +1,28 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import AuthService from '../../services/AuthService';
+import { useParams } from "react-router-dom";
 import './Confirmation.css'
 
-const Confirmation = (props) => {
+function Confirmation() {
 
-    const [loading, setLoading] = useState(false);
+    let params = useParams();
     const [message, setMessage] = useState("");
     const [color, setColor] = useState("");
+    console.log(params.confirmationCode);
 
-    setMessage("");
-    setLoading(true);
+    useEffect(() => {
+        setMessage("");
 
-    AuthService.verifyUser(props.confirmationCode).then((response) => {
-    if(response.hasOwnProperty('message')){
-        setMessage(response.message);
-        setColor('green');
-    } else {
-        setMessage(response.error);
-        setColor('red');
-    }
-    });
-    setLoading(false);
+        AuthService.verifyUser(params.confirmationCode).then((response) => {
+        if(response.hasOwnProperty('message')){
+            setMessage(response.message);
+            setColor('green');
+        } else {
+            setMessage(response.error);
+            setColor('red');
+        }
+        });
+    }, []);
 
     return (
         <div className='main-login'>
