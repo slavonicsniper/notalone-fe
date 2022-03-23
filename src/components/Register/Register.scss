@@ -25,7 +25,6 @@ h3 {
         background: linear-gradient(to right bottom, rgba($secondary-color, 0.7), rgba($main-color, 0.4));
         margin: 2rem auto;
         box-shadow: 0.5rem 0.5rem 2rem -0.9rem black;
-        min-height: 50vh;
         width: 40vw;
         display: flex;
         align-items: center;
@@ -100,6 +99,11 @@ h3 {
 
 .alert {
     margin-bottom: 1rem;;
+}
+
+.alert.big {
+    font-size: 2rem;
+    color: black;
 }
 
 .alert.red {

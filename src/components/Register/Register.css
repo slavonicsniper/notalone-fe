@@ -24,7 +24,6 @@ h3 {
   margin: 2rem auto;
   -webkit-box-shadow: 0.5rem 0.5rem 2rem -0.9rem black;
           box-shadow: 0.5rem 0.5rem 2rem -0.9rem black;
-  min-height: 50vh;
   width: 40vw;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -134,6 +133,11 @@ h3 {
 
 .alert {
   margin-bottom: 1rem;
+}
+
+.alert.big {
+  font-size: 2rem;
+  color: black;
 }
 
 .alert.red {

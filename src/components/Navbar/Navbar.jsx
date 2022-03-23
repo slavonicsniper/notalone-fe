@@ -26,7 +26,7 @@ function Navbar() {
       <div className='right-side-navbar'>
         <ul className='menu-list'>
           <li>
-            <a href='/'>Log In</a>
+            <a href='/login'>Log In</a>
           </li>
           <li>
           <a href='/register'>Sign Up</a>

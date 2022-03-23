@@ -72,9 +72,34 @@ const verifyUser = async (code) => {
     return resData;
 };
 
+const forgotPassword = async (code) => {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+    };
+    let resData = await fetch(API_URL + '/reset-password/confirm/' + code, requestOptions)
+        .then(response => {
+            if (response.status >= 200 && response.status <= 299) {
+                return response.json();
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(async (result) => {
+                return result;
+            },
+            (error) => {
+                return error;
+        });
+    return resData;
+};
+
 
 export default {
   login,
   register,
-  verifyUser
+  verifyUser,
+  forgotPassword
 }

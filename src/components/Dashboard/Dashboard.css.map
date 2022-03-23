@@ -2,8 +2,8 @@
     "version": 3,
     "mappings": "",
     "sources": [
-        "Login.scss"
+        "Dashboard.scss"
     ],
     "names": [],
-    "file": "Login.css"
+    "file": "Dashboard.css"
 }
