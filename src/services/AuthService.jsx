@@ -1,5 +1,3 @@
-const API_URL = 'https://notalone-be.herokuapp.com/api/v1';
-
 const login = async (details) => {
     const requestOptions = {
         method: 'POST',
@@ -11,7 +9,7 @@ const login = async (details) => {
             password: details.password 
     })
     };
-    let resData = await fetch(API_URL + '/users/login', requestOptions)
+    let resData = await fetch(process.env.REACT_APP_API_URL + '/users/login', requestOptions)
         .then(response => response.json())
         .then(async (result) => {
                 return result;
@@ -37,7 +35,7 @@ const register = async (details) => {
             country: details.country
     })
     };
-    let resData = await fetch(API_URL + '/users/register', requestOptions)
+    let resData = await fetch(process.env.REACT_APP_API_URL + '/users/register', requestOptions)
         .then(response => response.json())
         .then(async (result) => {
                 return result;
@@ -55,7 +53,7 @@ const verifyUser = async (code) => {
             'Content-Type': 'application/json',
         },
     };
-    let resData = await fetch(API_URL + '/users/confirm/' + code, requestOptions)
+    let resData = await fetch(process.env.REACT_APP_API_URL + '/users/confirm/' + code, requestOptions)
         .then(response => {
             if (response.status >= 200 && response.status <= 299) {
                 return response.json();
