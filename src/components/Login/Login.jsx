@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import AuthService from '../../services/AuthService';
 import './Login.css'
 
-function Login() {
+function Login({handleLogin, handleData}) {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -16,9 +16,9 @@ function Login() {
       setLoading(true);
 
       AuthService.login(details).then((response) => {
-        if(response.hasOwnProperty('message')){
-          setMessage(response.message);
-          setColor('green');
+        if(response.status === 'Success'){
+          handleLogin(true)
+          handleData(response.data)
         } else {
           setMessage(response.error);
           setColor('red');
