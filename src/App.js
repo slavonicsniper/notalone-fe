@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Navbar from './components/Navbar/Navbar';
@@ -10,10 +10,22 @@ import Dashboard from './components/Dashboard/Dashboard';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
-  console.log(`loggedIn: ${loggedIn}`)
+  const [data, setData] = useState({})
+
+  useEffect(() => {
+    setLoggedIn(JSON.parse(window.localStorage.getItem('loggedIn')));
+    setData(JSON.parse(window.localStorage.getItem('data')));
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem('loggedIn', loggedIn);
+  }, [loggedIn]);
+
   const handleLogin = isAuthenticated => setLoggedIn(isAuthenticated)
 
-  const [data, setData] = useState({})
+  useEffect(() => {
+    window.localStorage.setItem('data', JSON.stringify(data));
+  }, [data]);
 
   const handleData = data => setData(data)
 
