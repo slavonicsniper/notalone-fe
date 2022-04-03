@@ -2,19 +2,20 @@ import React, {useEffect, useState} from 'react'
 import User from '../../services/User';
 
 export default function Dashboard() {
-    const [users, setUsers] = useState([])
+    const [profile, setProfile] = useState([])
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await User.getUsers()
-                setUsers(response.data)
-            } catch(err) {
-                console.log(err)
-            }
+        fetchProfile()
+    }, [profile])
+
+    const fetchProfile = async() => {
+        try {
+            const response = await User.getProfile()
+            setProfile(response.data)
+        } catch(err) {
+            console.log(err)
         }
-        fetchData()
-    }, [])
+    }
 
     return (
         <div>

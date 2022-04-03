@@ -32,11 +32,11 @@ function App() {
   return (
     <div className="container">
       <header>
-      <Navbar/>
         <Router>
+          <Navbar loggedIn={loggedIn} handleLogin={handleLogin} userData={data}/>
           <Routes>
-            <Route exact path="/" element={loggedIn ? <Dashboard userData={data}/> : <Navigate replace to="/login" />}/>
-            <Route path="/login" element={loggedIn ? <Navigate replace to="/" /> : <Login handleLogin={handleLogin} handleData={handleData}/>}/>              
+            <Route exact path="/" element={loggedIn ? <Dashboard/> : <Navigate replace to="/login" />}/>
+            <Route path="/login" element={loggedIn ? <Navigate replace to="/" /> : <Login handleLogin={handleLogin} handleData={handleData}/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/forgotPassword" element={<ForgotPassword/>}/>
             <Route path="/confirm/:confirmationCode" element={<Confirmation/>}/>
