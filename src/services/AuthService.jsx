@@ -77,7 +77,7 @@ const forgotPassword = async (code) => {
             'Content-Type': 'application/json',
         },
     };
-    let resData = await fetch(API_URL + '/reset-password/confirm/' + code, requestOptions)
+    let resData = await fetch(process.env.REACT_APP_API_URL + '/reset-password/confirm/' + code, requestOptions)
         .then(response => {
             if (response.status >= 200 && response.status <= 299) {
                 return response.json();
