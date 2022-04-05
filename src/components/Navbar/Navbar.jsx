@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom';
-import './Navbar.css';
 import logo from './connect-logo.png';
 import AuthService from '../../services/AuthService';
+import {Container, Navbar, Nav, NavDropdown} from 'react-bootstrap'
 
-function Navbar(props) {
+function Navigation(props) {
 
   const handleLogout = () => {
     if(props.loggedIn) {
@@ -18,44 +18,41 @@ function Navbar(props) {
   }
 
   return (
-    <nav>
-      <div>
-        <div className='left-side-navbar'>
-          <div className='logo-img-navbar'>
-            <img src={logo} className='logo-img'/>
-          </div>
-          <div className='logo-img-text'>
-            NOT<font>Alone</font>
-          </div>
-        </div>
-      </div>
-
-      {/* <i className='fa fa-bars'></i> */}
-      
-
-      <div className='right-side-navbar'>
-        { props.loggedIn ?
-        <ul className='menu-list'>  
-          <li>
-            <Link to='/profile'>{props.userData.username}</Link>
-          </li>
-          <li>
-            <Link to='/' onClick={handleLogout}>Log Out</Link>
-          </li>
-        </ul>
-        :
-        <ul className='menu-list'> 
-          <li>
-            <Link to='/'>Log In</Link>
-          </li>
-          <li>
-            <Link to='/register'>Sign Up</Link>
-          </li>
-        </ul>
+    <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
+      <Container fluid="xxl">
+        <Navbar.Brand href="/">
+          <img
+            alt=""
+            src={logo}
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+          />{' '}
+        NOTAlone
+        </Navbar.Brand>
+        {props.loggedIn &&
+        <>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="#features">Activities</Nav.Link>
+              <Nav.Link href="#pricing">Availabilities</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link href="/profile">{props.userData.username}</Nav.Link>
+              <Nav.Link>
+                <Link to="/" onClick={handleLogout}>
+                Log out
+                </Link>
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </>
         }
-      </div>
-    </nav>
+                
+      </Container>
+    </Navbar>
   )
 }
 
-export default Navbar;
+export default Navigation;

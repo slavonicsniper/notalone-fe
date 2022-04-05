@@ -2,11 +2,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import {useState, useEffect} from 'react'
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
-import Navbar from './components/Navbar/Navbar';
+import Navigation from './components/Navbar/Navbar';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import Confirmation from './components/Confirmation/Confirmation';
-import './App.css';
 import Dashboard from './components/Dashboard/Dashboard';
+import Profile from './components/Profile/Profile';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -30,20 +30,19 @@ function App() {
   const handleData = data => setData(data)
 
   return (
-    <div className="container">
+    <Router>
       <header>
-        <Router>
-          <Navbar loggedIn={loggedIn} handleLogin={handleLogin} userData={data}/>
-          <Routes>
-            <Route exact path="/" element={loggedIn ? <Dashboard/> : <Navigate replace to="/login" />}/>
-            <Route path="/login" element={loggedIn ? <Navigate replace to="/" /> : <Login handleLogin={handleLogin} handleData={handleData}/>}/>
-            <Route path="/register" element={<Register/>}/>
-            <Route path="/forgotPassword" element={<ForgotPassword/>}/>
-            <Route path="/confirm/:confirmationCode" element={<Confirmation/>}/>
-          </Routes>
-        </Router>
+        <Navigation loggedIn={loggedIn} handleLogin={handleLogin} userData={data}/>
       </header>
-    </div>
+      <Routes>
+        <Route exact path="/" element={loggedIn ? <Dashboard/> : <Navigate replace to="/login" />}/>
+        <Route path="/login" element={loggedIn ? <Navigate replace to="/" /> : <Login handleLogin={handleLogin} handleData={handleData}/>}/>
+        <Route path="/register" element={<Register/>}/>
+        <Route path="/forgotPassword" element={<ForgotPassword/>}/>
+        <Route path="/confirm/:confirmationCode" element={<Confirmation/>}/>
+        <Route path="/profile" element={<Profile/>}/>
+      </Routes>
+    </Router>  
   );
 }
 
