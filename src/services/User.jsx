@@ -38,7 +38,29 @@ const getProfile = async () => {
     }
 }
 
+
+const updateProfile = async (data) => {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        credentials: 'include'
+    };
+    try {
+        const response = await fetch(process.env.REACT_APP_API_URL + '/users/profile', requestOptions)
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+          }
+        const json = await response.json();
+        return json;
+    } catch(err) {
+        console.error(err);
+    }
+}
+
 export default {
     getUsers,
-    getProfile
-}
+    getProfile,
+    updateProfile
