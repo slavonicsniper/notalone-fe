@@ -1,24 +1,19 @@
-const login = async (details) => {
+const login = async (data) => {
     const requestOptions = {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify(data),
         credentials: 'include',
-        body: JSON.stringify({ 
-            email: details.email,
-            password: details.password 
-    })
     };
-    let resData = await fetch(process.env.REACT_APP_API_URL + '/users/login', requestOptions)
-        .then(response => response.json())
-        .then(async (result) => {
-                return result;
-            },
-            (error) => {
-                return error;
-        });
-    return resData;
+    try {
+        const response = await fetch(process.env.REACT_APP_API_URL + '/users/login', requestOptions)
+        const json = await response.json();
+        return json;
+    } catch(err) {
+        console.error(err);
+    }
 }
 
 const logout = async () => {
@@ -40,30 +35,24 @@ const logout = async () => {
     return resData;
 }
 
-const register = async (details) => {
+const register = async (data) => {
     const requestOptions = {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-            username: details.username,
-            email: details.email,
-            password: details.password,
-            age: details.age,
-            city: details.city,
-            country: details.country
-    })
+        body: JSON.stringify(data),
     };
-    let resData = await fetch(process.env.REACT_APP_API_URL + '/users/register', requestOptions)
-        .then(response => response.json())
-        .then(async (result) => {
-                return result;
-            },
-            (error) => {
-                return error;
-        });
-    return resData;
+    try {
+        const response = await fetch(process.env.REACT_APP_API_URL + '/users/register', requestOptions)
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+          }
+        const json = await response.json();
+        return json;
+    } catch(err) {
+        console.error(err);
+    }
 }
 
 const verifyUser = async (code) => {
