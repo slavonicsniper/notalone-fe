@@ -38,6 +38,7 @@ const getProfile = async () => {
     }
 }
 
+
 const updateProfile = async (data) => {
     const requestOptions = {
         method: 'PUT',
@@ -63,4 +64,3 @@ export default {
     getUsers,
     getProfile,
     updateProfile
-}
