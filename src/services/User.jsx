@@ -63,4 +63,5 @@ const updateProfile = async (data) => {
 export default {
     getUsers,
     getProfile,
-    updateProfile
+    updateProfile,
+}
