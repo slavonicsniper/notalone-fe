@@ -1,21 +1,8 @@
-import React, {useState} from 'react'
-import { Link } from 'react-router-dom';
+import React from 'react'
 import logo from './connect-logo.png';
-import AuthService from '../../services/AuthService';
-import {Container, Navbar, Nav, NavDropdown} from 'react-bootstrap'
+import {Container, Navbar, Nav} from 'react-bootstrap'
 
 function Navigation(props) {
-
-  const handleLogout = () => {
-    if(props.loggedIn) {
-      AuthService.logout().then((response) => {
-        if(response.status === 'Success'){
-          props.handleLogin(false)
-          window.localStorage.removeItem('data')
-        } 
-      });
-    }
-  }
 
   return (
     <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
@@ -40,11 +27,7 @@ function Navigation(props) {
             </Nav>
             <Nav>
               <Nav.Link href="/profile">{props.userData.username}</Nav.Link>
-              <Nav.Link>
-                <Link to="/" onClick={handleLogout}>
-                Log out
-                </Link>
-              </Nav.Link>
+              <Nav.Link href="/logout">Log out</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </>

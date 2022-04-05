@@ -24,15 +24,13 @@ const logout = async () => {
         },
         credentials: 'include',
     };
-    let resData = await fetch(process.env.REACT_APP_API_URL + '/users/logout', requestOptions)
-        .then(response => response.json())
-        .then(async (result) => {
-                return result;
-            },
-            (error) => {
-                return error;
-        });
-    return resData;
+    try {
+        const response = await fetch(process.env.REACT_APP_API_URL + '/users/logout', requestOptions)
+        const json = await response.json();
+        return json;
+    } catch(err) {
+        console.error(err);
+    }
 }
 
 const register = async (data) => {
