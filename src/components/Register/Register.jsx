@@ -1,155 +1,187 @@
 import React, {useState} from 'react'
-import './Register.css';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import {Formik} from 'formik'
+import * as yup from 'yup';
+
 import AuthService from '../../services/AuthService';
+import {Form, Button, Alert, Stack} from 'react-bootstrap'
+
+
+const schema = yup.object().shape({
+  username: yup.string().required(),
+  email: yup.string()
+    .required()
+    .email(),
+  password: yup.string()
+    .required()
+    .min(6),
+  passwordConfirm: yup.string()
+    .required()
+    .oneOf([yup.ref('password')], 'Passwords do not match'),
+  city: yup.string().required(),
+  country: yup.string().required(),
+  age: yup.number()
+    .required()
+    .min(15)
+    .max(120),
+});
 
 function Register() {
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [color, setColor] = useState("");
-  const [details, setDetails] = useState({username: '', email: '', password: '', age: '', city: '', country: ''})
+  const [registerMessage, setRegisterMessage] = useState('')
 
-  const formSchema = Yup.object().shape({
-    username: Yup.string()
-      .required('Username is required'),
-    email: Yup.string()
-      .required('Email is required')
-      .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email'),
-    password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password length should be at least 6 characters'),
-    passwordConfirm: Yup.string()
-      .required('Confirm password is required')
-      .oneOf([Yup.ref('password')], 'Passwords do not match'),
-    age: Yup.string()
-      .matches(/^[1-9]$|^[1-9][0-9]$|^(100)$/, 'Invalid age'),
-  });
-
-  const validationOpt = { resolver: yupResolver(formSchema) };
-
-  const { register, handleSubmit, formState } = useForm(validationOpt);
-
-  const { errors } = formState;
-
-  const submitHandler = e => {
-    e.preventDefault();
-    setMessage("");
-    setLoading(true);
-    AuthService.register(details).then((response) => {
-      if(response.hasOwnProperty('message')){
-        setMessage(response.message);
-        setColor('green');
-      } else {
-        setMessage(response.error);
-        setColor('red');
-      }
-    });
-    setLoading(false);
-}
+  const handleRegister = async values => {
+    try {
+      const response = await AuthService.register(values)
+      setRegisterMessage(response.message)
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
   return (
-    <div className='main-login'>
-      <div className='main-box'>
-        <form onSubmit={submitHandler}>
-          <h3>Register</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor='username'>Username</label>
-              <input 
-                type='username' 
-                id='username'
-                {...register('username')}
-                className={`form-control ${errors.username ? 'is-invalid' : ''}`}
-                onChange={e => setDetails({...details, username: e.target.value})}
-                value={details.username}
-              />
-              <div className="invalid-feedback">
-                {errors.username?.message}
-              </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor='email_one'>Email</label>
-              <input 
-                type='string' 
-                id='email_one'
-                {...register('email')}
-                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                onChange={e => setDetails({...details, email: e.target.value})}
-                value={details.email}
-              />
-              <div className="invalid-feedback">
-                {errors.email?.message}
-              </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor='password-one'>Password</label>
-              <input 
-                type='password' 
-                id='password-one'
-                {...register('password')}
-                className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                onChange={e => setDetails({...details, password: e.target.value})}
-                value={details.password}
-              />
-              <div className="invalid-feedback">
-                {errors.password?.message}
-              </div>
-            </div>    
-            <div className="form-group">
-              <label htmlFor='password-confirm'>Confirm password</label>
-              <input 
-                type='password' 
-                id='password-confirm'
-                {...register('passwordConfirm')}
-                className={`form-control ${errors.passwordConfirm ? 'is-invalid' : ''}`}
-              />
-              <div className="invalid-feedback">
-                {errors.passwordConfirm?.message}
-              </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor='age'>Age</label>
-              <input 
-                id='age'
-                {...register('age')}
-                className={`form-control ${errors.age ? 'is-invalid' : ''}`}
-                onChange={e => setDetails({...details, age: e.target.value})}
-                value={details.age}
-              />
-              <div className="invalid-feedback">
-                {errors.age?.message}
-              </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor='city'>City</label>
-              <input 
-                id='city'
-                onChange={e => setDetails({...details, city: e.target.value})}
-                value={details.city}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor='country'>Country</label>
-              <input 
-                id='country'
-                onChange={e => setDetails({...details, country: e.target.value})}
-                value={details.country}
-              />
-            </div>
-            <button type='submit' className='submit-button'>Sign Up</button>
-          </div>
-          {message.length > 0 &&
-            <div className={'alert ' + color}>
-              {message}
-            </div>
+    <Formik
+      validationSchema={schema}
+      onSubmit={handleRegister}
+      initialValues={{
+        username: '',
+        email: '',
+        password: '',
+        passwordConfirm: '',
+        country: '',
+        city: '',
+        age: 0,
+      }}
+    >
+      {({
+        handleSubmit,
+        handleChange,
+        handleBlur,
+        handleReset,
+        values,
+        touched,
+        isValid,
+        errors,
+        isSubmitting,
+        dirty
+      }) => (
+        <Stack gap={3}>
+          {registerMessage &&
+            <Alert variant="success">
+              {registerMessage + ' before you '}
+              <Alert.Link href="/login">log in</Alert.Link>
+            </Alert>
           }
-        </form>
-      </div>
-    </div>
+          <div className="d-flex justify-content-center">
+            <Form  noValidate onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formRegisterUsername">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control 
+                    name="username" 
+                    placeholder="username"
+                    value={values.username}
+                    onChange={handleChange}
+                    isInvalid={!!errors.username}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.username}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRegisterEmail">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control 
+                    name="email" 
+                    placeholder="email" 
+                    value={values.email}
+                    onChange={handleChange}
+                    isInvalid={!!errors.email}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRegisterPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control 
+                  name="password" 
+                  type="password" 
+                  placeholder="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  isInvalid={!!errors.password}                
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRegisterPasswordConfirm">
+                  <Form.Label>Password Confirmation</Form.Label>
+                  <Form.Control 
+                    name="passwordConfirm" 
+                    type="password" 
+                    placeholder="password confirmation"
+                    value={values.passwordConfirm}
+                    onChange={handleChange}
+                    isInvalid={!!errors.passwordConfirm}                
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.passwordConfirm}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRegisterCountry">
+                  <Form.Label>Country</Form.Label>
+                  <Form.Control 
+                    name="country" 
+                    placeholder="country"
+                    value={values.country}
+                    onChange={handleChange}
+                    isInvalid={!!errors.country}                
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.country}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRegisterCity">
+                  <Form.Label>City</Form.Label>
+                  <Form.Control 
+                    name="city" 
+                    placeholder="city"
+                    value={values.city}
+                    onChange={handleChange}
+                    isInvalid={!!errors.city}                
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.city}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRegisterAge">
+                  <Form.Label>Age</Form.Label>
+                  <Form.Control 
+                    name="age" 
+                    type="number" 
+                    placeholder="age"
+                    value={values.age}
+                    onChange={handleChange}
+                    isInvalid={!!errors.age}                
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.age}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Stack direction="horizontal" gap={2} className="justify-content-center">
+                  <Button onClick={handleReset} disabled={!dirty || isSubmitting}>
+                    Reset
+                  </Button>
+                  <Button type="submit" disabled={isSubmitting}>
+                      Register
+                  </Button>
+                </Stack>
+            </Form>
+          </div>
+        </Stack>
+      )}
+    </Formik>
   )
+
 }
 
 export default Register;
