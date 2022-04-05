@@ -1,63 +1,51 @@
 import React, {useState} from 'react'
 import AuthService from '../../services/AuthService';
-import './Login.css'
+import {Alert, Container, Form, Button} from 'react-bootstrap'
 
 function Login({handleLogin, handleData}) {
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [color, setColor] = useState("");
-  const [details, setDetails] = useState({email: '', password: ''})
+  const [loginMessage, setLoginMessage] = useState("");
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  const submitHandler = (e) => {
-      e.preventDefault();
-
-      setMessage("");
-      setLoading(true);
-
-      AuthService.login(details).then((response) => {
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+        const response = await AuthService.login({email, password})
         if(response.status === 'Success'){
-          handleLogin(true)
           handleData(response.data)
+          handleLogin(true)
         } else {
-          setMessage(response.error);
-          setColor('red');
-        }
-      });
-      setLoading(false);
+          setLoginMessage(response.message);
+        }          
+    } catch(err) {
+        console.log(err)
+        setLoginMessage(err);
+    }
   }
 
   return (
-    <div className='main-login'>
-      <div className='main-box'>
-        <form onSubmit={submitHandler}>
-          <h3>Login</h3>
-          <label htmlFor='email-one'>Email</label>
-          <input 
-              type='email' 
-              id='email-one'
-              onChange={e => setDetails({...details, email: e.target.value})}
-              value={details.email}
-          />
-          <label htmlFor='password-one'>Password</label>
-          <input 
-              type='password' 
-              id='password-one'
-              onChange={e => setDetails({...details, password: e.target.value})}
-              value={details.password}
-          />
-          <label htmlFor='forgot-password'>
-            <a href='/forgotPassword'>I forgot my password</a>
-          </label>
-          <button type='submit' className='submit-button'>Log in</button>
-          {message.length > 0 &&
-            <div className={'alert ' + color}>
-              {message}
-            </div>
-          }
-        </form>
-      </div>
-    </div>
+    <Container className="d-flex justify-content-center">
+      {loginMessage && 
+        <Alert variant="danger">
+          {loginMessage}
+        </Alert>
+      }
+      <Form onSubmit={handleSubmit}>
+        <h1>Login</h1>
+        <Form.Group className="mb-3" controlId="formProfileEmail">
+          <Form.Label>Email</Form.Label>
+          <Form.Control type="email" placeholder="email" onChange={e => setEmail(e.target.value)}/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formProfilePassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="password" onChange={e => setPassword(e.target.value)}/>
+        </Form.Group>
+        <Button type="submit">
+            Login
+        </Button>
+      </Form>
+    </Container>
   )
 }
 
