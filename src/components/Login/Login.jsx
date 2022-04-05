@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import Dashboard from '../Dashboard/Dashboard';
 import './Login.css'
 
-function Login() {
+function Login({handleLogin, handleData}) {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,10 +19,9 @@ function Login() {
       setLoading(true);
 
       AuthService.login(details).then((response) => {
-        if(response.hasOwnProperty('message')){
-          setMessage(response.message);
-          setColor('green');
-          setLoggedIn(true);
+        if(response.status === 'Success'){
+          handleLogin(true)
+          handleData(response.data)
         } else {
           setMessage(response.error);
           setColor('red');

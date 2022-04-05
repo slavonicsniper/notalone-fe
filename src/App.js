@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {useState, useEffect} from 'react'
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Navbar from './components/Navbar/Navbar';
@@ -8,15 +9,36 @@ import Dashboard from './components/Dashboard/Dashboard';
 
 import './App.css';
 
+
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [data, setData] = useState({})
+
+  useEffect(() => {
+    setLoggedIn(JSON.parse(window.localStorage.getItem('loggedIn')));
+    setData(JSON.parse(window.localStorage.getItem('data')));
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem('loggedIn', loggedIn);
+  }, [loggedIn]);
+
+  const handleLogin = isAuthenticated => setLoggedIn(isAuthenticated)
+
+  useEffect(() => {
+    window.localStorage.setItem('data', JSON.stringify(data));
+  }, [data]);
+
+  const handleData = data => setData(data)
+
   return (
     <div className="container">
       <header>
-      <Navbar/>
         <Router>
+          <Navbar loggedIn={loggedIn} handleLogin={handleLogin} userData={data}/>
           <Routes>
-            <Route exact path="/" element={<Dashboard/>}/>
-            <Route path="/login" element={<Login/>}/>
+            <Route exact path="/" element={loggedIn ? <Dashboard/> : <Navigate replace to="/login" />}/>
+            <Route path="/login" element={loggedIn ? <Navigate replace to="/" /> : <Login handleLogin={handleLogin} handleData={handleData}/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/forgotPassword" element={<ForgotPassword/>}/>
             <Route path="/confirm/:confirmationCode" element={<Confirmation/>}/>

@@ -1,11 +1,21 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 import logo from './connect-logo.png';
+import AuthService from '../../services/AuthService';
 
-function Navbar() {
+function Navbar(props) {
 
-
-  //somehow add logic into JSX if isUserLoggedIn=true don't show Login/Register
+  const handleLogout = () => {
+    if(props.loggedIn) {
+      AuthService.logout().then((response) => {
+        if(response.status === 'Success'){
+          props.handleLogin(false)
+          window.localStorage.removeItem('data')
+        } 
+      });
+    }
+  }
 
   return (
     <nav>
@@ -24,14 +34,25 @@ function Navbar() {
       
 
       <div className='right-side-navbar'>
-        <ul className='menu-list'>
+        { props.loggedIn ?
+        <ul className='menu-list'>  
           <li>
-            <a href='/login'>Log In</a>
+            <Link to='/profile'>{props.userData.username}</Link>
           </li>
           <li>
-          <a href='/register'>Sign Up</a>
+            <Link to='/' onClick={handleLogout}>Log Out</Link>
           </li>
         </ul>
+        :
+        <ul className='menu-list'> 
+          <li>
+            <Link to='/'>Log In</Link>
+          </li>
+          <li>
+            <Link to='/register'>Sign Up</Link>
+          </li>
+        </ul>
+        }
       </div>
     </nav>
   )
