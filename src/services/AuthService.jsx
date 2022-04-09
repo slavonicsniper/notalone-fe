@@ -41,7 +41,6 @@ const register = async (data) => {
         },
         body: JSON.stringify(data),
     };
-    delete data.confirmPassword;
     try {
         const response = await fetch(process.env.REACT_APP_API_URL + '/users/register', requestOptions)
         if (!response.ok) {
