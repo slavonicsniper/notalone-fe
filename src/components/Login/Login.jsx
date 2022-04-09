@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { useNavigate } from "react-router-dom";
 import AuthService from '../../services/AuthService';
 import {Alert, Container, Form, Button} from 'react-bootstrap'
 
@@ -7,6 +8,7 @@ function Login({handleLogin, handleData}) {
   const [loginMessage, setLoginMessage] = useState("");
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate(); 
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -24,8 +26,13 @@ function Login({handleLogin, handleData}) {
     }
   }
 
+  const redirect = () =>{ 
+    navigate('/reset-password');
+  }
+
   return (
-    <Container className="d-flex justify-content-center">
+    <Container>
+      <br></br>
       {loginMessage && 
         <Alert variant="danger">
           {loginMessage}
@@ -45,6 +52,10 @@ function Login({handleLogin, handleData}) {
             Login
         </Button>
       </Form>
+      <br></br>
+      <Button variant="secondary" type="submit" onClick={redirect}>
+        Reset password
+      </Button>
     </Container>
   )
 }

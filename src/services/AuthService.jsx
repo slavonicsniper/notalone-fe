@@ -41,6 +41,7 @@ const register = async (data) => {
         },
         body: JSON.stringify(data),
     };
+    delete data.confirmPassword;
     try {
         const response = await fetch(process.env.REACT_APP_API_URL + '/users/register', requestOptions)
         if (!response.ok) {
@@ -77,10 +78,62 @@ const verifyUser = async (code) => {
     return resData;
 };
 
+const initializePasswordReset = async (data) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    };
+    let resData = await fetch(process.env.REACT_APP_API_URL + '/users/reset-password', requestOptions)
+        .then(response => {
+            if (response.status >= 200 && response.status <= 299) {
+                return response.json();
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(async (result) => {
+                return result;
+            },
+            (error) => {
+                return error;
+        });
+    return resData;
+}
+
+const verifyPasswordReset = async (code, body) => {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    };
+    let resData = await fetch(process.env.REACT_APP_API_URL + '/users/reset-password/' + code, requestOptions)
+        .then(response => {
+            if (response.status >= 200 && response.status <= 299) {
+                return response.json();
+            } else {
+                throw Error(response.statusText);
+            }
+        })
+        .then(async (result) => {
+                return result;
+            },
+            (error) => {
+                return error;
+        });
+    return resData;
+};
+
 
 export default {
   login,
   logout,
   register,
-  verifyUser
+  verifyUser,
+  initializePasswordReset,
+  verifyPasswordReset
 }
