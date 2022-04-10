@@ -12,9 +12,9 @@ function ResetPassword() {
     try {
       const res = await AuthService.initializePasswordReset({email}) 
       if(res.status === 'Success'){
-        setResponse(response => ({...response, message: res.message, alertVariant: 'success'}));
+        setResponse(({message: res.message, alertVariant: 'success'}));
       } else{
-        setResponse(response => ({...response, message: res.message, alertVariant: 'danger'}));
+        setResponse(({message: res.message, alertVariant: 'danger'}));
       }
     } catch(error) {
       console.log(error)
@@ -23,8 +23,7 @@ function ResetPassword() {
 
   return (
     <div>
-      <br></br>
-        <Container>   
+        <Container className="d-flex vh-100 justify-content-center align-items-center">   
         <Form onSubmit={handleSubmit}>
           <h1>Reset password</h1>
           <Form.Group className="mb-3" controlId="formProfileEmail">
@@ -36,7 +35,7 @@ function ResetPassword() {
             {response.message}
           </Alert>
           }
-          <Button type="submit">
+          <Button className="w-100" type="submit">
               Reset password
           </Button>
         </Form>

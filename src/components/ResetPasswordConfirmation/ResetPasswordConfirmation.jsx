@@ -1,23 +1,31 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
+import {Formik} from 'formik'
+import * as yup from 'yup';
 import AuthService from '../../services/AuthService';
-import {Alert, Container, Form, Button} from 'react-bootstrap'
+import {Alert, Container, Form, Button, Row, Col} from 'react-bootstrap'
 import { useParams } from "react-router-dom";
+
+const schema = yup.object().shape({
+    password: yup.string()
+      .required()
+      .min(6),
+    passwordConfirm: yup.string()
+      .required()
+      .oneOf([yup.ref('password')], 'Passwords do not match')
+  });
 
 function ResetPasswordConfirmation() {
     let params = useParams();
     const initialResponse = { message: '', alertVariant: '' };
-    const [password, setPassword] = useState('')
     const [response, setResponse] = useState(initialResponse);
 
-    const handleSubmit = async e => {
-        e.preventDefault();
+    const handlePasswordReset = async values => {
         try {
-            const res = await AuthService.verifyPasswordReset(params.confirmationCode, {password}) 
-            console.log(res)
+            const res = await AuthService.verifyPasswordReset(params.confirmationCode, {values}) 
             if(res.status === 'Success'){
-              setResponse(response => ({...response, message: res.message, alertVariant: 'success'}));
+              setResponse(({message: res.message, alertVariant: 'success'}));
             } else{
-              setResponse(response => ({...response, message: res.message, alertVariant: 'danger'}));
+              setResponse(({message: res.message, alertVariant: 'danger'}));
             }
           } catch(error) {
             console.log(error)
@@ -25,30 +33,76 @@ function ResetPasswordConfirmation() {
     }
 
     return (
+        <Formik
+        validationSchema={schema}
+        onSubmit={handlePasswordReset}
+        validateOnChange={false}
+        validateOnBlur={true}
+        initialValues={{
+            password: '',
+            passwordConfirm: ''
+        }}
+        >
+        {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            values,
+            touched,
+            isValid,
+            errors,
+            isSubmitting,
+            dirty
+        }
+        ) => (
+            
         <div>
-            <br></br>
-            <Container>
+            <Container className="d-flex vh-100 justify-content-center align-items-center">
                 {response.message && 
                 <Alert variant={response.alertVariant}>
                     {response.message}
                 </Alert>
                 }
-                <Form onSubmit={handleSubmit}>
+                <Form noValidate onSubmit={handleSubmit}>
                     <h1>Enter new password</h1>
-                    <Form.Group className="mb-3" controlId="formProfileEmail">
+                    <Form.Group className="mb-3">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="password"/>
+                    <Form.Control
+                        name="password"
+                        type="password"
+                        placeholder="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.password}  
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.password}
+                    </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="formProfilePassword">
+                    <Form.Group className="mb-3">
                     <Form.Label>Confirm password</Form.Label>
-                    <Form.Control type="password" placeholder="confirm password" onChange={e => setPassword(e.target.value)}/>
+                    <Form.Control 
+                        name="passwordConfirm"
+                        type="password" 
+                        placeholder="confirm password" 
+                        value={values.passwordConfirm}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.passwordConfirm}  
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.passwordConfirm}
+                    </Form.Control.Feedback>
                     </Form.Group>
-                    <Button type="submit">
+                    <Button className="w-100" type="submit" disabled={isSubmitting}>
                         Reset password
                     </Button>
                 </Form>
             </Container>
         </div>
+      )}
+    </Formik>
     )
 }
 

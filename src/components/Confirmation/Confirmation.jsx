@@ -12,9 +12,9 @@ function Confirmation() {
         try {
             const res = await AuthService.verifyUser(params.confirmationCode) 
             if(res.status === 'Success'){
-              setResponse(response => ({...response, message: res.message, alertVariant: 'success'}));
+              setResponse(({message: res.message, alertVariant: 'success'}));
             } else{
-              setResponse(response => ({...response, message: res.message, alertVariant: 'danger'}));
+              setResponse(({message: res.message, alertVariant: 'danger'}));
             }
           } catch(error) {
             console.log(error)
@@ -23,8 +23,7 @@ function Confirmation() {
 
     return (
         <div>
-            <Container>
-              <br></br>
+            <Container className="d-flex vh-100 justify-content-center align-items-center">
                 {response.message && 
                 <Alert variant={response.alertVariant}>
                     {response.message}
