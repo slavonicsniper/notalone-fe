@@ -16,8 +16,7 @@ const schema = yup.object().shape({
 
 function ResetPasswordConfirmation() {
     let params = useParams();
-    const initialResponse = { message: '', alertVariant: '' };
-    const [response, setResponse] = useState(initialResponse);
+    const [response, setResponse] = useState({ message: '', alertVariant: '' });
 
     const handlePasswordReset = async values => {
         try {
